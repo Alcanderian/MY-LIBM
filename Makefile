@@ -1,5 +1,5 @@
 CXX?=g++
-CXXFLAGS+=-O3 -g -std=c++11
+CXXFLAGS+=-O3 -g -std=c++11 -DUSE_MY_LIBM
 SSEFLAGS?=-msse4.2
 AVXFLAGS?=-mavx
 FMAFLAGS?=-mfma -mavx2

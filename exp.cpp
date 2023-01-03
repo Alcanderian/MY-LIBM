@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <float.h>
 
-#if defined(__x86_64__) || defined(__i386__)
+#if (defined(__x86_64__) || defined(__i386__)) && defined(USE_MY_LIBM)
 
 namespace my_libm {
 
@@ -313,7 +313,7 @@ __exp (double x)
 	    return 0.0;
 	  if (abstop >= top12 (INFINITY))
 	    return 1.0 + x;
-	    return 0;
+	  return 0.0;
 	}
       /* Large x is special cased below.  */
       abstop = 0;

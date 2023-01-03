@@ -1,15 +1,15 @@
 #include <iostream>
+#include <iomanip>
 #include <chrono>
 #include <cmath>
 #include "mylibm.h"
 
-template <typename T>
-bool check_array_error(T* input, T* ref, uint64_t len, T eps)
+bool check_array_error(double* input, double* ref, uint64_t len, double eps)
 {
     for (uint64_t i = 0; i < len; ++i) {
         double err = double(input[i] - ref[i]);
         if (std::abs(err / ref[i]) > eps && std::abs(err) > eps) {
-            std::cerr << "error[" << i << "]=" << input[i] << " ref:" << ref[i];
+            std::cerr << std::setprecision(15) << "error[" << i << "]=" << input[i] << " ref:" << ref[i];
             return false;
         }
     }
@@ -24,7 +24,7 @@ void bench_sincos(int argc, char**argv) {
     double ds2[len*2];
 
     for (int i = 0; i < len; ++i) {
-        da[i] = i * 0.1;
+        da[i] = i * 0.100005;
     }
     
     for (int i = 0; i < len; ++i) {
@@ -87,7 +87,7 @@ void bench_exp(int argc, char**argv) {
     double ds2[len];
 
     for (int i = 0; i < len; ++i) {
-        da[i] = i * 0.1;
+        da[i] = i * 0.100005;
     }
     
     for (int i = 0; i < len; ++i) {

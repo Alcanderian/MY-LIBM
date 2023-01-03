@@ -1,6 +1,6 @@
 #include <math.h>
 
-#if defined(__x86_64__) || defined(__i386__)
+#if (defined(__x86_64__) || defined(__i386__)) && defined(USE_MY_LIBM)
 
 namespace my_libm {
 
