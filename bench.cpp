@@ -70,7 +70,7 @@ void bench_sincos(int argc, char**argv) {
         ker1(loop);
         auto t1 = std::chrono::high_resolution_clock::now();
         auto ms = (t1 - t0).count() / 1e6;
-        std::cerr << "sincos std = " << ms << " ms" << std::endl;
+        std::cerr << "sincos std = " << ms << " ms, lat = " << ms * 1e6 / (loop * len) << " ns" << std::endl;
     }
 
     {
@@ -79,7 +79,7 @@ void bench_sincos(int argc, char**argv) {
         ker2(loop);
         auto t1 = std::chrono::high_resolution_clock::now();
         auto ms = (t1 - t0).count() / 1e6;
-        std::cerr << "sincos myl = " << ms << " ms" << std::endl;
+        std::cerr << "sincos myl = " << ms << " ms, lat = " << ms * 1e6 / (loop * len) << " ns" << std::endl;
     }
 
     check_array_error(ds2, ds1, len*2, 1e-15);
@@ -132,7 +132,7 @@ void bench_exp(int argc, char**argv) {
         ker1(loop);
         auto t1 = std::chrono::high_resolution_clock::now();
         auto ms = (t1 - t0).count() / 1e6;
-        std::cerr << "exp std = " << ms << " ms" << std::endl;
+        std::cerr << "exp std = " << ms << " ms, lat = " << ms * 1e6 / (loop * len) << " ns" << std::endl;
     }
 
     {
@@ -141,7 +141,7 @@ void bench_exp(int argc, char**argv) {
         ker2(loop);
         auto t1 = std::chrono::high_resolution_clock::now();
         auto ms = (t1 - t0).count() / 1e6;
-        std::cerr << "exp myl = " << ms << " ms" << std::endl;
+        std::cerr << "exp myl = " << ms << " ms, lat = " << ms * 1e6 / (loop * len) << " ns" << std::endl;
     }
 
     check_array_error(ds2, ds1, len, 1e-15);
