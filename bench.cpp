@@ -6,14 +6,20 @@
 
 bool check_array_error(double* input, double* ref, uint64_t len, double eps)
 {
+    uint64_t off = len / 2;
+    uint64_t tail = len - off;
+    if (tail > 10) tail = 10;
+    for (uint64_t i = off; i < off + tail; ++i) {
+        std::cerr << std::setprecision(15) << "[" << i << "]=" << input[i] << " ref:" << ref[i] << std::endl;
+    }
     for (uint64_t i = 0; i < len; ++i) {
         double err = double(input[i] - ref[i]);
         if (std::abs(err / ref[i]) > eps && std::abs(err) > eps) {
-            std::cerr << std::setprecision(15) << "error[" << i << "]=" << input[i] << " ref:" << ref[i];
+            std::cerr << std::setprecision(15) << "error[" << i << "]=" << input[i] << " ref:" << ref[i] << std::endl;
             return false;
         }
     }
-    std::cerr << "pass";
+    std::cerr << "pass" << std::endl;
     return true;
 }
 
@@ -77,7 +83,6 @@ void bench_sincos(int argc, char**argv) {
     }
 
     check_array_error(ds2, ds1, len*2, 1e-15);
-    std::cerr << std::endl;
 }
 
 void bench_exp(int argc, char**argv) {
@@ -140,7 +145,6 @@ void bench_exp(int argc, char**argv) {
     }
 
     check_array_error(ds2, ds1, len, 1e-15);
-    std::cerr << std::endl;
 }
 
 int main(int argc, char**argv) {

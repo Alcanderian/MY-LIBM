@@ -1,7 +1,7 @@
 #ifndef MYLIBM_H
 #define MYLIBM_H
 
-#if (defined(__x86_64__) || defined(__i386__)) && defined(USE_MY_LIBM)
+#if (defined(__x86_64__) || defined(__i386__)) && !defined(__INTEL_COMPILER) && defined(USE_MY_LIBM)
 
 namespace my_libm {
 
@@ -26,16 +26,16 @@ __sincos (double x, double *sinx, double *cosx);
 namespace my_libm {
 
 double
-__exp (double x) { return exp(x); };
+__exp (double x) { return ::exp(x); };
 
 double
-__cos (double x) { return cos(x); };
+__cos (double x) { return ::cos(x); };
 
 double
-__sin (double x) { return sin(x); };
+__sin (double x) { return ::sin(x); };
 
 void
-__sincos (double x, double *sinx, double *cosx) { sincos(x, sinx, cosx); };
+__sincos (double x, double *sinx, double *cosx) { ::sincos(x, sinx, cosx); };
 
 };
 
