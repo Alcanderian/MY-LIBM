@@ -84,3 +84,16 @@ cexp std = 358.482 ms, lat = 17.9241 ns
 cexp myl = 353.821 ms, lat = 17.6911 ns
 PASS
 ```
+### test on an ARM device, gcc 7.5
+```
+./noa_bench.exe
+sincos std = 2850.76 ms, lat = 57.0152 ns
+sincos myl = 1732.82 ms, lat = 34.6563 ns
+PASS
+exp std = 2126.26 ms, lat = 21.2626 ns
+exp myl = 958.889 ms, lat = 9.58889 ns
+PASS
+cexp std = 1767.54 ms, lat = 88.3769 ns
+cexp myl = 1022.17 ms, lat = 51.1087 ns
+PASS
+```
