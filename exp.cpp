@@ -339,7 +339,7 @@ __exp (double x)
   /* Without fma the worst case error is 0.25/N ulp larger.  */
   /* Worst case error is less than 0.5+1.11/N+(abs poly error * 2^53) ulp.  */
   tmp = tail + r + r2 * (C2 + r * C3) + r2 * r2 * (C4 + r * C5);
-  if ((abstop == 0))
+  if (abstop == 0)
     return specialcase (tmp, sbits, ki);
   scale = asdouble (sbits);
   /* Note: tmp == 0 or |tmp| > 2^-65 and scale > 2^-739, so there

@@ -1,6 +1,8 @@
 #ifndef MYLIBM_H
 #define MYLIBM_H
 
+#include <complex>
+
 #if (defined(__x86_64__) || defined(__i386__)) && !defined(__INTEL_COMPILER) && defined(USE_MY_LIBM)
 
 namespace my_libm {
@@ -17,6 +19,9 @@ __sin (double x);
 void
 __sincos (double x, double *sinx, double *cosx);
 
+std::complex<double>
+__cexp (const std::complex<double> &x);
+
 };
 
 #else
@@ -25,17 +30,20 @@ __sincos (double x, double *sinx, double *cosx);
 
 namespace my_libm {
 
-double
-__exp (double x) { return ::exp(x); };
+inline double
+__exp (double x) { return std::exp(x); };
 
-double
-__cos (double x) { return ::cos(x); };
+inline double
+__cos (double x) { return std::cos(x); };
 
-double
-__sin (double x) { return ::sin(x); };
+inline double
+__sin (double x) { return std::sin(x); };
 
-void
-__sincos (double x, double *sinx, double *cosx) { ::sincos(x, sinx, cosx); };
+inline void
+__sincos (double x, double *sinx, double *cosx) { sincos(x, sinx, cosx); };
+
+inline std::complex<double>
+__cexp (const std::complex<double> &x) { return std::exp(x); }
 
 };
 

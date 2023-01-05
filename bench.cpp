@@ -2,24 +2,26 @@
 #include <iomanip>
 #include <chrono>
 #include <cmath>
+#include <complex>
+
 #include "mylibm.h"
 
 bool check_array_error(double* input, double* ref, uint64_t len, double eps)
 {
-    uint64_t off = len / 2;
-    uint64_t tail = len - off;
-    if (tail > 10) tail = 10;
-    for (uint64_t i = off; i < off + tail; ++i) {
-        std::cerr << std::setprecision(15) << "[" << i << "]=" << input[i] << " ref:" << ref[i] << std::endl;
-    }
+    // uint64_t off = len / 2;
+    // uint64_t tail = len - off;
+    // if (tail > 10) tail = 10;
+    // for (uint64_t i = off; i < off + tail; ++i) {
+    //     std::cerr << std::setprecision(15) << "[" << i << "]=" << input[i] << " ref:" << ref[i] << std::endl;
+    // }
     for (uint64_t i = 0; i < len; ++i) {
         double err = double(input[i] - ref[i]);
         if (std::abs(err / ref[i]) > eps && std::abs(err) > eps) {
-            std::cerr << std::setprecision(15) << "error[" << i << "]=" << input[i] << " ref:" << ref[i] << std::endl;
+            std::cerr << std::setprecision(15) << "ERROR [" << i << "]=" << input[i] << " ref:" << ref[i] << std::endl;
             return false;
         }
     }
-    std::cerr << "pass" << std::endl;
+    std::cerr << "PASS" << std::endl;
     return true;
 }
 
@@ -96,7 +98,7 @@ void bench_exp(int argc, char**argv) {
     }
     
     for (int i = 0; i < len; ++i) {
-        ds1[i] = exp(da[i]);
+        ds1[i] = std::exp(da[i]);
         ds2[i] = my_libm::__exp(da[i]);
     }
 
@@ -112,7 +114,7 @@ void bench_exp(int argc, char**argv) {
     auto ker1 = [&](int iter) {
         for (int ii = 0; ii < iter; ++ii)
             for (int i = 0; i < len; ++i) {
-                ds1[i] = exp(da[i]);
+                ds1[i] = std::exp(da[i]);
             }
     };
 
@@ -147,8 +149,71 @@ void bench_exp(int argc, char**argv) {
     check_array_error(ds2, ds1, len, 1e-15);
 }
 
+void bench_cexp(int argc, char**argv) {
+    int len = 10000;
+    std::complex<double> da[len];
+    std::complex<double> ds1[len];
+    std::complex<double> ds2[len];
+
+    for (int i = 0; i < len; ++i) {
+        da[i] = std::complex<double>(i * 0.0100005, (i & 1) ? (i * 0.05) : (i * -0.05));
+    }
+
+    for (int i = 0; i < len; ++i) {
+        ds1[i] = std::exp(da[i]);
+        ds2[i] = my_libm::__cexp(da[i]);
+    }
+
+    int warm = 20;
+    int loop = 2000;
+    if (argc > 1) {
+        warm = atoi(argv[1]);
+    }
+    if (argc > 2) {
+        loop = atoi(argv[2]);
+    }
+
+    auto ker1 = [&](int iter) {
+        for (int ii = 0; ii < iter; ++ii)
+            for (int i = 0; i < len; ++i) {
+                ds1[i] = std::exp(da[i]);
+            }
+    };
+
+    auto ker2 = [&](int iter) {
+        for (int ii = 0; ii < iter; ++ii)
+            for (int i = 0; i < len; ++i) {
+                ds2[i] = my_libm::__cexp(da[i]);
+            }
+    };
+
+    ker1(warm);
+    ker2(warm);
+
+    {
+        ker1(warm);
+        auto t0 = std::chrono::high_resolution_clock::now();
+        ker1(loop);
+        auto t1 = std::chrono::high_resolution_clock::now();
+        auto ms = (t1 - t0).count() / 1e6;
+        std::cerr << "cexp std = " << ms << " ms, lat = " << ms * 1e6 / (loop * len) << " ns" << std::endl;
+    }
+
+    {
+        ker2(warm);
+        auto t0 = std::chrono::high_resolution_clock::now();
+        ker2(loop);
+        auto t1 = std::chrono::high_resolution_clock::now();
+        auto ms = (t1 - t0).count() / 1e6;
+        std::cerr << "cexp myl = " << ms << " ms, lat = " << ms * 1e6 / (loop * len) << " ns" << std::endl;
+    }
+
+    check_array_error((double*)ds2, (double*)ds1, len*2, 1e-15);
+}
+
 int main(int argc, char**argv) {
     bench_sincos(argc, argv);
     bench_exp(argc, argv);
+    bench_cexp(argc, argv);
     return 0;
 }
