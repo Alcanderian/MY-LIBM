@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <float.h>
 
-#if (defined(__x86_64__) || defined(__i386__)) && !defined(__INTEL_COMPILER) && defined(USE_MY_LIBM)
+#if !defined(__INTEL_COMPILER) && defined(USE_MY_LIBM)
 
 namespace my_libm {
 
@@ -11,9 +11,6 @@ typedef union { unsigned int u[2]; int4 i[2]; double x; double d; } mynumber;
 
 #define max(x, y)  (((y) > (x)) ? (y) : (x))
 #define min(x, y)  (((y) < (x)) ? (y) : (x))
-
-#define HIGH_HALF 1
-#define  LOW_HALF 0
 
 #define EXP_TABLE_BITS 7
 #define EXP_POLY_ORDER 5
@@ -203,10 +200,6 @@ const exp_data __exp_data = {
 #ifndef WANT_ROUNDING
 /* Correct special case results in non-nearest rounding modes.  */
 # define WANT_ROUNDING 1
-#endif
-#ifndef WANT_ERRNO
-/* Set errno according to ISO C with (math_errhandling & MATH_ERRNO) != 0.  */
-# define WANT_ERRNO 1
 #endif
 
 static inline uint64_t

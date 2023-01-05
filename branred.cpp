@@ -1,6 +1,7 @@
 #include <math.h>
+#include <endian.h>
 
-#if (defined(__x86_64__) || defined(__i386__)) && !defined(__INTEL_COMPILER) && defined(USE_MY_LIBM)
+#if !defined(__INTEL_COMPILER) && defined(USE_MY_LIBM)
 
 namespace my_libm {
 
@@ -9,6 +10,27 @@ typedef union { unsigned int u[2]; int4 i[2]; double x; double d; } mynumber;
 
 #define max(x, y)  (((y) > (x)) ? (y) : (x))
 #define min(x, y)  (((y) < (x)) ? (y) : (x))
+
+#if (__BYTE_ORDER == __BIG_ENDIAN)
+
+#define HIGH_HALF 0
+#define  LOW_HALF 1
+
+static const mynumber
+
+/**/           t576 = {{0x63f00000, 0x00000000}}, /* 2 ^ 576  */
+/**/          tm600 = {{0x1a700000, 0x00000000}}, /* 2 ^- 600 */
+/**/           tm24 = {{0x3e700000, 0x00000000}}, /* 2 ^- 24  */
+/**/            big = {{0x43380000, 0x00000000}}, /*  6755399441055744      */
+/**/           big1 = {{0x43580000, 0x00000000}}, /* 27021597764222976      */
+/**/            hp0 = {{0x3FF921FB, 0x54442D18}} ,/* 1.5707963267948966     */
+/**/            hp1 = {{0x3C91A626, 0x33145C07}} ,/* 6.123233995736766e-17  */
+/**/            mp1 = {{0x3FF921FB, 0x58000000}}, /* 1.5707963407039642     */
+/**/            mp2 = {{0xBE4DDE97, 0x40000000}}; /*-1.3909067675399456e-08 */
+
+#endif
+
+#if (__BYTE_ORDER == __LITTLE_ENDIAN)
 
 #define HIGH_HALF 1
 #define  LOW_HALF 0
@@ -24,6 +46,8 @@ static const mynumber
 /**/            hp1 = {{0x33145C07, 0x3C91A626}},  /* 6.123233995736766e-17  */
 /**/            mp1 = {{0x58000000, 0x3FF921FB}},  /* 1.5707963407039642     */
 /**/            mp2 = {{0x40000000, 0xBE4DDE97}};  /*-1.3909067675399456e-08 */
+
+#endif
 
 static const double toverp[75] = { /*  2/ PI base 24*/
   10680707.0,  7228996.0,  1387004.0,  2578385.0, 16069853.0,
