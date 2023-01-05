@@ -34,7 +34,7 @@ __cexp_impl (const std::complex<FLOAT> &x)
 	{
       
 	  /* Imaginary part is finite.  */
-	  const int t = (int) ((std::numeric_limits<FLOAT>::max_exponent - 1) * (M_LN2));
+	  const int t = (int) ((std::numeric_limits<FLOAT>::max_exponent - 1) * (FLOAT)(M_LN2));
 	  FLOAT sinix, cosix;
 
 	  if ((fabs (x.imag()) > std::numeric_limits<FLOAT>::min()))
