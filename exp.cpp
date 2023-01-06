@@ -284,6 +284,25 @@ top12 (double x)
   return asuint64 (x) >> 52;
 }
 
+static double
+xflow (uint32_t sign, double y)
+{
+  y = (sign ? -y : y) * y;
+  return y;
+}
+
+inline double
+__math_uflow (uint32_t sign)
+{
+  return xflow (sign, 1.2882297539194267e-231);
+}
+
+inline double
+__math_oflow (uint32_t sign)
+{
+  return xflow (sign, 3.105036184601418e+231);
+}
+
 double
 __exp (double x)
 {
@@ -306,7 +325,10 @@ __exp (double x)
 	    return 0.0;
 	  if (abstop >= top12 (INFINITY))
 	    return 1.0 + x;
-	  return 0.0;
+	  if (asuint64 (x) >> 63)
+	    return __math_uflow (0);
+	  else
+	    return __math_oflow (0);
 	}
       /* Large x is special cased below.  */
       abstop = 0;
