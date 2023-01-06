@@ -1,10 +1,8 @@
-extract some math func from glibc with c++
-
-
+# extract some math func from glibc with c++
 NOTE: intel compiler will get the wrong result
 
-##test on intel 10980XE, gcc 7.5, glibc 2.27
-
+### test on intel 10980XE, gcc 7.5, glibc 2.27
+```
 ./fma_bench.exe 
 sincos std = 1166.43 ms, lat = 23.3287 ns
 sincos myl = 546.622 ms, lat = 10.9324 ns
@@ -37,9 +35,9 @@ PASS
 cexp std = 724.537 ms, lat = 36.2268 ns
 cexp myl = 435.684 ms, lat = 21.7842 ns
 PASS
-
-##test on intel 10980XE, gcc 7.5, glibc 2.36
-
+```
+### test on intel 10980XE, gcc 7.5, glibc 2.36
+```
 ./fma_bench.exe 
 sincos std = 794.988 ms, lat = 15.8998 ns
 sincos myl = 552.658 ms, lat = 11.0532 ns
@@ -72,9 +70,9 @@ PASS
 cexp std = 487.592 ms, lat = 24.3796 ns
 cexp myl = 435.563 ms, lat = 21.7782 ns
 PASS
-
-##test on intel 10980XE, intel compiler 2021
-
+```
+### test on intel 10980XE, intel compiler 2021
+```
 ./noa_bench.exe 
 sincos std = 458.454 ms, lat = 9.16908 ns
 sincos myl = 466.991 ms, lat = 9.33982 ns
@@ -85,3 +83,17 @@ PASS
 cexp std = 358.482 ms, lat = 17.9241 ns
 cexp myl = 353.821 ms, lat = 17.6911 ns
 PASS
+```
+### test on an ARM device, gcc 7.5
+```
+./noa_bench.exe
+sincos std = 2850.76 ms, lat = 57.0152 ns
+sincos myl = 1732.82 ms, lat = 34.6563 ns
+PASS
+exp std = 2126.26 ms, lat = 21.2626 ns
+exp myl = 958.889 ms, lat = 9.58889 ns
+PASS
+cexp std = 1767.54 ms, lat = 88.3769 ns
+cexp myl = 1022.17 ms, lat = 51.1087 ns
+PASS
+```
